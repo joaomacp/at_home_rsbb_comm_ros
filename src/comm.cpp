@@ -169,6 +169,18 @@ to_string (roah_rsbb_msgs::RobotState const& msg)
   if (msg.has_object_pose_theta()) {
     ss << " ; object_pose_theta: " << msg.object_pose_theta();
   }
+  if (msg.has_person_name()) {
+    ss << " ; person_name: " << msg.person_name();
+  }
+  if (msg.has_person_pose_x()) {
+    ss << " ; person_pose_x: " << msg.person_pose_x();
+  }
+  if (msg.has_person_pose_y()) {
+    ss << " ; person_pose_y: " << msg.person_pose_y();
+  }
+  if (msg.has_person_pose_theta()) {
+    ss << " ; person_pose_theta: " << msg.person_pose_theta();
+  }
   return ss.str();
 }
 

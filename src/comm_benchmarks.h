@@ -42,6 +42,7 @@
 #include <roah_rsbb_comm_ros/GoalOMF.h>
 #include <roah_rsbb_comm_ros/String.h>
 #include <roah_rsbb_comm_ros/ResultHOPF.h>
+#include <roah_rsbb_comm_ros/ResultHPPF.h>
 #include <roah_rsbb_comm_ros/Bool.h>
 #include <roah_rsbb_comm_ros/Percentage.h>
 
@@ -823,6 +824,61 @@ class BenchmarkHSUF
 
 
 
+class BenchmarkHPPF
+  : public BenchmarkBase
+{
+    roah_rsbb_comm_ros::ResultHPPF::Request result_;
+
+    bool
+    end_execute_callback (roah_rsbb_comm_ros::ResultHPPF::Request& req,
+                          roah_rsbb_comm_ros::ResultHPPF::Response& res)
+    {
+      ROS_INFO_STREAM ("Ending execution stage");
+      result_ = req;
+      new_state (roah_rsbb_msgs::RobotState_State_RESULT_TX);
+      return true;
+    }
+
+  protected:
+    virtual void
+    advertise_end_execute()
+    {
+      end_execute_srv_ = nh_.advertiseService ("/roah_rsbb/end_execute", &BenchmarkHPPF::end_execute_callback, this);
+    }
+
+  public:
+    BenchmarkHPPF (NodeHandle& nh,
+                   boost::function<void() > start_burst)
+      : BenchmarkBase (nh, start_burst)
+    {
+    }
+
+    virtual void
+    fill_result (roah_rsbb_msgs::RobotState& msg)
+    {
+      msg.set_person_name (result_.person_name);
+      msg.set_person_pose_x (result_.person_pose.x);
+      msg.set_person_pose_y (result_.person_pose.y);
+      msg.set_person_pose_theta (result_.person_pose.theta);
+      
+      YAML::Node result_node;
+      
+      result_node["person_name"] = result_.person_name;
+      result_node["x"] = result_.person_pose.x;
+      result_node["y"] = result_.person_pose.y;
+      result_node["theta"] = result_.person_pose.theta;
+      
+      YAML::Emitter emitted_stream;
+      
+      emitted_stream << result_node;
+      
+      msg.set_generic_result(emitted_stream.c_str());
+      
+    }
+};
+
+
+
 BenchmarkBase*
 BenchmarkBase::create (uint8_t benchmark,
                        NodeHandle& nh,
@@ -845,6 +901,8 @@ BenchmarkBase::create (uint8_t benchmark,
       return new BenchmarkSTB (nh, start_burst);
     case roah_rsbb_comm_ros::Benchmark::HSUF:
       return new BenchmarkHSUF (nh, start_burst);
+    case roah_rsbb_comm_ros::Benchmark::HPPF:
+      return new BenchmarkHPPF (nh, start_burst);
     default:
       ROS_ERROR_STREAM ("Cannot initialize benchmark of type " << static_cast<int> (benchmark));
       return nullptr;
@@ -881,6 +939,9 @@ BenchmarkBase::benchmark_from_string (string const& benchmark)
   }
   else if (upper == "HSUF") {
     return roah_rsbb_comm_ros::Benchmark::HSUF;
+  }
+  else if (upper == "HPPF") {
+    return roah_rsbb_comm_ros::Benchmark::HPPF;
   }
 
   ROS_ERROR_STREAM ("Unrecognized benchmark of type \"" << benchmark << "\"");

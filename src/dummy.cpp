@@ -29,6 +29,7 @@
 
 #include <std_srvs/Empty.h>
 #include <roah_rsbb_comm_ros/ResultHOPF.h>
+#include <roah_rsbb_comm_ros/ResultHPPF.h>
 #include <roah_rsbb_comm_ros/Percentage.h>
 
 
@@ -256,6 +257,38 @@ class HSUF
   public:
     HSUF()
     {
+    }
+};
+
+
+
+class HPPF
+  : public Benchmark
+{
+  public:
+    HPPF()
+    {
+    }
+
+    void
+    execute()
+    {
+      Duration (3, 0).sleep();
+
+      if (ros::service::waitForService ("/roah_rsbb/end_execute", 100)) {
+        roah_rsbb_comm_ros::ResultHPPF s;
+        s.request.person_name = "Alice";
+        s.request.person_pose.x = 0.4;
+        s.request.person_pose.y = 0.4;
+        s.request.person_pose.theta = 0.9;
+
+        if (! ros::service::call ("/roah_rsbb/end_execute", s)) {
+          ROS_ERROR ("Error calling service /roah_rsbb/end_execute");
+        }
+      }
+      else {
+        ROS_ERROR ("Could not find service /roah_rsbb/end_execute");
+      }
     }
 };
 
