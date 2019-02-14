@@ -350,6 +350,10 @@ class DummyRobot
           std::cout << "HSUF" << std::endl;
           benchmark_.reset (new HSUF());
           break;
+        case roah_rsbb_comm_ros::Benchmark::HPPF:
+          std::cout << "HPPF" << std::endl;
+          benchmark_.reset (new HPPF());
+          break;
       }
       
       
