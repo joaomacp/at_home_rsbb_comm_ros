@@ -7,4 +7,5 @@ uint8 HNF = 5
 uint8 HSUF = 6
 uint8 STB = 7
 uint8 HPPF = 8
+uint8 HPFF = 9
 uint8 benchmark
