@@ -685,12 +685,6 @@ class BenchmarkHOPF
     virtual void
     fill_result (roah_rsbb_msgs::RobotState& msg)
     {
-      msg.set_object_class (result_.object_class);
-      msg.set_object_name (result_.object_name);
-      msg.set_object_pose_x (result_.object_pose.x);
-      msg.set_object_pose_y (result_.object_pose.y);
-      msg.set_object_pose_theta (result_.object_pose.theta);
-      
       YAML::Node result_node;
       
       result_node["class"] = result_.object_class;
@@ -703,8 +697,7 @@ class BenchmarkHOPF
       
       emitted_stream << result_node;
       
-      msg.set_generic_result(emitted_stream.c_str());
-      
+      msg.set_generic_result(emitted_stream.c_str()); 
     }
 };
 
@@ -856,11 +849,6 @@ class BenchmarkHPPF
     virtual void
     fill_result (roah_rsbb_msgs::RobotState& msg)
     {
-      msg.set_person_name (result_.person_name);
-      msg.set_person_pose_x (result_.person_pose.x);
-      msg.set_person_pose_y (result_.person_pose.y);
-      msg.set_person_pose_theta (result_.person_pose.theta);
-      
       YAML::Node result_node;
       
       result_node["person_name"] = result_.person_name;
@@ -873,7 +861,6 @@ class BenchmarkHPPF
       emitted_stream << result_node;
       
       msg.set_generic_result(emitted_stream.c_str());
-      
     }
 };
 
