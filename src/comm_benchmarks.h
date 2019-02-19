@@ -944,6 +944,7 @@ BenchmarkBase::benchmark_from_string (string const& benchmark)
   }
   else if (upper == "HPPF") {
     return roah_rsbb_comm_ros::Benchmark::HPPF;
+  }
   else if (upper == "HPFF") {
     return roah_rsbb_comm_ros::Benchmark::HPFF;
   }
