@@ -294,6 +294,17 @@ class HPPF
 
 
 
+class HPFF
+  : public Benchmark
+{
+  public:
+    HPFF()
+    {
+    }
+};
+
+
+
 class DummyRobot
 {
     NodeHandle nh_;
@@ -353,6 +364,10 @@ class DummyRobot
         case roah_rsbb_comm_ros::Benchmark::HPPF:
           std::cout << "HPPF" << std::endl;
           benchmark_.reset (new HPPF());
+          break;
+        case roah_rsbb_comm_ros::Benchmark::HPFF:
+          std::cout << "HPFF" << std::endl;
+          benchmark_.reset (new HPFF());
           break;
       }
       

@@ -866,6 +866,19 @@ class BenchmarkHPPF
 
 
 
+class BenchmarkHPFF
+  : public BenchmarkBase
+{
+  public:
+    BenchmarkHPFF (NodeHandle& nh,
+                   boost::function<void() > start_burst)
+      : BenchmarkBase (nh, start_burst)
+    {
+    }
+};
+
+
+
 BenchmarkBase*
 BenchmarkBase::create (uint8_t benchmark,
                        NodeHandle& nh,
@@ -890,6 +903,8 @@ BenchmarkBase::create (uint8_t benchmark,
       return new BenchmarkHSUF (nh, start_burst);
     case roah_rsbb_comm_ros::Benchmark::HPPF:
       return new BenchmarkHPPF (nh, start_burst);
+    case roah_rsbb_comm_ros::Benchmark::HPFF:
+      return new BenchmarkHPFF (nh, start_burst);
     default:
       ROS_ERROR_STREAM ("Cannot initialize benchmark of type " << static_cast<int> (benchmark));
       return nullptr;
@@ -929,6 +944,8 @@ BenchmarkBase::benchmark_from_string (string const& benchmark)
   }
   else if (upper == "HPPF") {
     return roah_rsbb_comm_ros::Benchmark::HPPF;
+  else if (upper == "HPFF") {
+    return roah_rsbb_comm_ros::Benchmark::HPFF;
   }
 
   ROS_ERROR_STREAM ("Unrecognized benchmark of type \"" << benchmark << "\"");
