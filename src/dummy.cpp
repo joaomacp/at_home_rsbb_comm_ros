@@ -301,6 +301,12 @@ class HPFF
     HPFF()
     {
     }
+
+    void
+    execute()
+    {
+      // Don't call end_execute(), this benchmark runs for 5 minutes, during which the robot should always be following a person.
+    }
 };
 
 
