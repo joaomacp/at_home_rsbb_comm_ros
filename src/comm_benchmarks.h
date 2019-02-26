@@ -903,7 +903,7 @@ class BenchmarkHGMF
 
       goal_msg_->x = goal_payload[0].as<double>();
       goal_msg_->y = goal_payload[1].as<double>();
-      goal_msg_->theta = 0f;
+      goal_msg_->theta = 0.0;
 
       cout << "RECEIVING GOAL!!! " << endl;
       cout << "\tx: " << goal_msg_->x << endl;
