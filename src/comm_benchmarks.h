@@ -879,6 +879,44 @@ class BenchmarkHPFF
 
 
 
+class BenchmarkHGMF
+  : public BenchmarkBase
+{
+    Publisher goal_pub_;
+    geometry_msgs::Pose2D::Ptr goal_msg_;
+
+  public:
+    BenchmarkHGMF (NodeHandle& nh,
+                  boost::function<void() > start_burst)
+      : BenchmarkBase (nh, start_burst)
+      , goal_pub_ (nh.advertise<geometry_msgs::Pose2D> ("/roah_rsbb/goal", 1, true))
+    {
+      //should_accept_new_prepare_while_executing_ = true;
+    }
+
+    virtual void
+    receive_goal (roah_rsbb_msgs::BenchmarkState const& proto_msg)
+    {
+      goal_msg_ = boost::make_shared<geometry_msgs::Pose2D>();
+
+      YAML::Node goal_payload = YAML::Load(proto_msg.generic_goal());
+
+      goal_msg_->x = goal_payload[0].as<double>();
+      goal_msg_->y = goal_payload[1].as<double>();
+      goal_msg_->theta = 0f;
+
+      cout << "RECEIVING GOAL!!! " << endl;
+      cout << "\tx: " << goal_msg_->x << endl;
+      cout << "\ty: " << goal_msg_->y << endl;
+      cout << "\ttheta: " << goal_msg_->theta << endl;
+
+      goal_pub_.publish (goal_msg_);
+
+    }
+};
+
+
+
 BenchmarkBase*
 BenchmarkBase::create (uint8_t benchmark,
                        NodeHandle& nh,
@@ -905,6 +943,8 @@ BenchmarkBase::create (uint8_t benchmark,
       return new BenchmarkHPPF (nh, start_burst);
     case roah_rsbb_comm_ros::Benchmark::HPFF:
       return new BenchmarkHPFF (nh, start_burst);
+    case roah_rsbb_comm_ros::Benchmark::HGMF:
+      return new BenchmarkHGMF (nh, start_burst);
     default:
       ROS_ERROR_STREAM ("Cannot initialize benchmark of type " << static_cast<int> (benchmark));
       return nullptr;
@@ -947,6 +987,9 @@ BenchmarkBase::benchmark_from_string (string const& benchmark)
   }
   else if (upper == "HPFF") {
     return roah_rsbb_comm_ros::Benchmark::HPFF;
+  }
+  else if (upper == "HGMF") {
+    return roah_rsbb_comm_ros::Benchmark::HGMF;
   }
 
   ROS_ERROR_STREAM ("Unrecognized benchmark of type \"" << benchmark << "\"");

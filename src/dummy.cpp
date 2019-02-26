@@ -230,10 +230,6 @@ public:
 
 	void execute() {
 		Duration(3, 0).sleep();
-//#include <iostream>
-//
-//		cout << "Press ENTER to end execute stage..." << endl;
-//		cin.get();
 
 		end_execute();
 	}
@@ -312,6 +308,21 @@ class HPFF
 
 
 
+class HGMF: public Benchmark {
+
+public:
+	HGMF() {
+	}
+
+	void execute() {
+		Duration(3, 0).sleep();
+
+		end_execute();
+	}
+};
+
+
+
 class DummyRobot
 {
     NodeHandle nh_;
@@ -375,6 +386,10 @@ class DummyRobot
         case roah_rsbb_comm_ros::Benchmark::HPFF:
           std::cout << "HPFF" << std::endl;
           benchmark_.reset (new HPFF());
+          break;
+        case roah_rsbb_comm_ros::Benchmark::HGMF:
+          std::cout << "HGMF" << std::endl;
+          benchmark_.reset (new HGMF());
           break;
       }
       
