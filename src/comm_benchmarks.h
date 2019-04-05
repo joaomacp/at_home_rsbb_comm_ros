@@ -248,13 +248,13 @@ class BenchmarkBase
         case roah_rsbb_msgs::RobotState_State_PREPARING:
         //break;
         case roah_rsbb_msgs::RobotState_State_WAITING_GOAL:
-          cout << "\nMoving to WAITING_GOAL state\n" << endl;
+          cout << "\nMoving to PREPARE state\n" << endl;
           benchmark_state->benchmark_state = roah_rsbb_comm_ros::BenchmarkState::PREPARE;
           break;
         case roah_rsbb_msgs::RobotState_State_EXECUTING:
         //break;
         case roah_rsbb_msgs::RobotState_State_RESULT_TX:
-          cout << "\nMoving to RESULT_TX state\n" << endl;
+          cout << "\nMoving to EXECUTE state\n" << endl;
           benchmark_state->benchmark_state = roah_rsbb_comm_ros::BenchmarkState::EXECUTE;
           break;
       }
