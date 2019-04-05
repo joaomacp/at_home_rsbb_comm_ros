@@ -909,7 +909,7 @@ class BenchmarkHGMF
       object_type_ = goal_payload[2].as<int>();
 
       cout << "RECEIVING GOAL!!! " << endl;
-      cout << "\object type: " << object_type_ << endl;
+      cout << "\tobject type: " << object_type_ << endl;
       cout << "\tx: " << goal_msg_->x << endl;
       cout << "\ty: " << goal_msg_->y << endl;
       cout << "\ttheta: " << goal_msg_->theta << endl;
