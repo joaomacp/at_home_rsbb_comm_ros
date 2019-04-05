@@ -242,19 +242,19 @@ class BenchmarkBase
       roah_rsbb_comm_ros::BenchmarkState::Ptr benchmark_state = boost::make_shared<roah_rsbb_comm_ros::BenchmarkState>();
       switch (new_state) {
         case roah_rsbb_msgs::RobotState_State_STOP:
-          cout << "\n\nISTO TA A IR PARA: 0\n\n" << flush;
+          cout << "\nMoving to STOP state\n" << endl;
           benchmark_state->benchmark_state = roah_rsbb_comm_ros::BenchmarkState::STOP;
           break;
         case roah_rsbb_msgs::RobotState_State_PREPARING:
         //break;
         case roah_rsbb_msgs::RobotState_State_WAITING_GOAL:
-          cout << "\n\nISTO TA A IR PARA: 1\n\n" << flush;
+          cout << "\nMoving to WAITING_GOAL state\n" << endl;
           benchmark_state->benchmark_state = roah_rsbb_comm_ros::BenchmarkState::PREPARE;
           break;
         case roah_rsbb_msgs::RobotState_State_EXECUTING:
         //break;
         case roah_rsbb_msgs::RobotState_State_RESULT_TX:
-          cout << "\n\nISTO TA A IR PARA: 2\n\n" << flush;
+          cout << "\nMoving to RESULT_TX state\n" << endl;
           benchmark_state->benchmark_state = roah_rsbb_comm_ros::BenchmarkState::EXECUTE;
           break;
       }
@@ -884,6 +884,7 @@ class BenchmarkHGMF
 {
     Publisher goal_pub_;
     geometry_msgs::Pose2D::Ptr goal_msg_;
+    int object_type_;
 
   public:
     BenchmarkHGMF (NodeHandle& nh,
@@ -905,7 +906,10 @@ class BenchmarkHGMF
       goal_msg_->y = goal_payload[1].as<double>();
       goal_msg_->theta = 0.0;
 
+      object_type_ = goal_payload[2].as<int>();
+
       cout << "RECEIVING GOAL!!! " << endl;
+      cout << "\object type: " << object_type_ << endl;
       cout << "\tx: " << goal_msg_->x << endl;
       cout << "\ty: " << goal_msg_->y << endl;
       cout << "\ttheta: " << goal_msg_->theta << endl;
