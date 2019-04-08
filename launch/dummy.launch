@@ -5,7 +5,7 @@
   <arg name="rsbb_port" default="6666"/>
   <arg name="rsbb_key" default="PASSWORD"/>
 
-  <node pkg="roah_rsbb_comm_ros" type="comm" name="roah_rsbb_comm" respawn="true" output="screen">
+  <node pkg="roah_rsbb_comm_ros" type="comm" name="roah_rsbb_comm" respawn="true">
     <param name="team_name" type="string" value="$(arg team_name)"/>
     <param name="robot_name" type="string" value="$(arg robot_name)"/>
     <param name="rsbb_host" type="string" value="$(arg rsbb_host)"/>
@@ -13,6 +13,6 @@
     <param name="rsbb_key" type="string" value="$(arg rsbb_key)"/>
   </node>
 
-  <node pkg="roah_rsbb_comm_ros" type="dummy" name="dummy_robot" respawn="true"/>
+  <node pkg="roah_rsbb_comm_ros" type="dummy" name="dummy_robot" respawn="true" output="screen"/>
 
 </launch>
