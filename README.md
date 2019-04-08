@@ -27,8 +27,7 @@ sudo apt-get install build-essential cmake libboost-all-dev libprotoc-dev protob
 Furthermore, you need to use at least ROS Hydro, follow the
 instructions at http://wiki.ros.org/ROS/Installation/ .
 
-This was tested with Ubuntu 12.04.5 LTS (Precise Pangolin) and
-14.04.1 LTS (Trusty Tahr).
+This package was successfully tested on Ubuntu 12, 14, 16 and 18.
 
 
 ## Compiling
@@ -181,7 +180,8 @@ has changed to `EXECUTE`. Therefore, you only need to receive the
 
 
 #### Navigation Functionality
-`TODO`
+In this benchmark, waypoints are sent to the robot one by one.
+Waypoints are published as Pose2D messages to the `/roah_rsbb/goal` topic.
 
 #### Speech Understanding Functionality
 

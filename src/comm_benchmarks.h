@@ -40,6 +40,7 @@
 #include <roah_rsbb_comm_ros/Benchmark.h>
 #include <roah_rsbb_comm_ros/BenchmarkState.h>
 #include <roah_rsbb_comm_ros/GoalOMF.h>
+#include <roah_rsbb_comm_ros/GoalHGMF.h>
 #include <roah_rsbb_comm_ros/String.h>
 #include <roah_rsbb_comm_ros/ResultHOPF.h>
 #include <roah_rsbb_comm_ros/ResultHPPF.h>
@@ -883,14 +884,13 @@ class BenchmarkHGMF
   : public BenchmarkBase
 {
     Publisher goal_pub_;
-    geometry_msgs::Pose2D::Ptr goal_msg_;
-    int object_type_;
+    roah_rsbb_comm_ros::GoalHGMF::Ptr goal_msg_;
 
   public:
     BenchmarkHGMF (NodeHandle& nh,
                   boost::function<void() > start_burst)
       : BenchmarkBase (nh, start_burst)
-      , goal_pub_ (nh.advertise<geometry_msgs::Pose2D> ("/roah_rsbb/goal", 1, true))
+      , goal_pub_ (nh.advertise<roah_rsbb_comm_ros::GoalHGMF> ("/roah_rsbb/goal", 1, true))
     {
       //should_accept_new_prepare_while_executing_ = true;
     }
@@ -898,21 +898,22 @@ class BenchmarkHGMF
     virtual void
     receive_goal (roah_rsbb_msgs::BenchmarkState const& proto_msg)
     {
-      goal_msg_ = boost::make_shared<geometry_msgs::Pose2D>();
+      goal_msg_ = boost::make_shared<roah_rsbb_comm_ros::GoalHGMF>();
 
       YAML::Node goal_payload = YAML::Load(proto_msg.generic_goal());
 
-      goal_msg_->x = goal_payload[0].as<double>();
-      goal_msg_->y = goal_payload[1].as<double>();
-      goal_msg_->theta = 0.0;
+      goal_msg_->target_pose.x = goal_payload[0].as<double>();
+      goal_msg_->target_pose.y = goal_payload[1].as<double>();
+      goal_msg_->target_pose.theta = 0.0;
 
-      object_type_ = goal_payload[2].as<int>();
+      goal_msg_->object_type = goal_payload[2].as<uint8_t>();
 
       cout << "RECEIVING GOAL!!! " << endl;
-      cout << "\tobject type: " << object_type_ << endl;
-      cout << "\tx: " << goal_msg_->x << endl;
-      cout << "\ty: " << goal_msg_->y << endl;
-      cout << "\ttheta: " << goal_msg_->theta << endl;
+
+      cout << "\ttarget x: " << goal_msg_->target_pose.x << endl;
+      cout << "\ttarget y: " << goal_msg_->target_pose.y << endl;
+
+      cout << "\tobject type: " <<  goal_msg_->object_type << endl;
 
       goal_pub_.publish (goal_msg_);
 

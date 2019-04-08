@@ -26,6 +26,7 @@
 #include <std_msgs/UInt32.h>
 #include <roah_rsbb_comm_ros/Benchmark.h>
 #include <roah_rsbb_comm_ros/BenchmarkState.h>
+#include <roah_rsbb_comm_ros/GoalHGMF.h>
 
 #include <std_srvs/Empty.h>
 #include <roah_rsbb_comm_ros/ResultHOPF.h>
@@ -223,16 +224,25 @@ class HOPF
 
 
 class HNF: public Benchmark {
+  Subscriber goal_sub_;
 
-public:
-	HNF() {
-	}
+  void execute() {
+    Duration(3, 0).sleep();
 
-	void execute() {
-		Duration(3, 0).sleep();
+    end_execute();
+  }
 
-		end_execute();
-	}
+  void goal_callback(geometry_msgs::Pose2D::Ptr msg) {
+    std::cout << "Received waypoint:" << endl;
+    std::cout << "\tX: " << msg->x << endl;
+    std::cout << "\tY: " << msg->y << endl;
+    std::cout << "\ttheta: " << msg->theta << endl;
+  }
+
+  public:
+    HNF() {
+      goal_sub_ = nh_.subscribe ("/roah_rsbb/goal", 1, &HNF::goal_callback, this);
+    }
 };
 
 
@@ -309,16 +319,26 @@ class HPFF
 
 
 class HGMF: public Benchmark {
+  Subscriber goal_sub_;
 
-public:
-	HGMF() {
-	}
-
-	void execute() {
+  void execute() {
 		Duration(3, 0).sleep();
 
 		end_execute();
 	}
+
+  void goal_callback(roah_rsbb_comm_ros::GoalHGMF::Ptr msg) {
+    std::cout << "Received goal:" << endl;
+
+    std::cout << "\tObject type: " << msg->object_type << endl;
+
+    std::cout << "\tTarget X: " << msg->target_pose.x << endl;
+    std::cout << "\tTarget Y: " << msg->target_pose.y << endl;
+  }
+public:
+	HGMF() {
+    goal_sub_ = nh_.subscribe ("/roah_rsbb/goal", 1, &HGMF::goal_callback, this);
+	}	
 };
 
 
